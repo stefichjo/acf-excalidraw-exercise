@@ -3407,7 +3407,7 @@ class App extends React.Component<AppProps, AppState> {
     }
   };
 
-  // TODO: Cover with tests
+  // TODO: cover with tests — https://github.com/excalidraw/excalidraw/issues/6753
   private async insertClipboardContent(
     data: ClipboardData,
     dataTransferFiles: ParsedDataTransferFile[],
