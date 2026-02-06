@@ -71,8 +71,8 @@ const distanceToRectanguloidElement = (
   p: GlobalPoint,
 ) => {
   const center = elementCenterPoint(element, elementsMap);
-  // Rotate the point by the element's angle to work in axis-aligned space
-  const rotatedPoint = pointRotateRads(p, center, element.angle as Radians);
+  // Rotate the point by the inverse angle to work in axis-aligned space
+  const rotatedPoint = pointRotateRads(p, center, -element.angle as Radians);
 
   // Decompose into line segments (sides) and curves (rounded corners)
   const [sides, corners] = deconstructRectanguloidElement(element);
