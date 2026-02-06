@@ -26,6 +26,10 @@ import type {
   ExcalidrawRectanguloidElement,
 } from "./types";
 
+/**
+ * Returns the minimum distance from a global point to the nearest
+ * edge of the given element, dispatching to shape-specific handlers.
+ */
 export const distanceToElement = (
   element: ExcalidrawElement,
   elementsMap: ElementsMap,
@@ -53,12 +57,13 @@ export const distanceToElement = (
 };
 
 /**
- * Returns the distance of a point and the provided rectangular-shaped element,
- * accounting for roundness and rotation
+ * Computes the minimum distance from a point to the outline of a
+ * rectangular-shaped element, accounting for rounded corners and rotation.
  *
- * @param element The rectanguloid element
- * @param p The point to consider
- * @returns The eucledian distance to the outline of the rectanguloid element
+ * @param element The rectanguloid element to measure against
+ * @param elementsMap Map of all elements for resolving center points
+ * @param p The reference point in global coordinates
+ * @returns The minimum euclidean distance to the element outline
  */
 const distanceToRectanguloidElement = (
   element: ExcalidrawRectanguloidElement,
@@ -66,11 +71,10 @@ const distanceToRectanguloidElement = (
   p: GlobalPoint,
 ) => {
   const center = elementCenterPoint(element, elementsMap);
-  // To emulate a rotated rectangle we rotate the point in the inverse angle
-  // instead. It's all the same distance-wise.
-  const rotatedPoint = pointRotateRads(p, center, -element.angle as Radians);
+  // Rotate the point by the element's angle to work in axis-aligned space
+  const rotatedPoint = pointRotateRads(p, center, element.angle as Radians);
 
-  // Get the element's building components we can test against
+  // Decompose into line segments (sides) and curves (rounded corners)
   const [sides, corners] = deconstructRectanguloidElement(element);
 
   return Math.min(
@@ -82,12 +86,13 @@ const distanceToRectanguloidElement = (
 };
 
 /**
- * Returns the distance of a point and the provided diamond element, accounting
- * for roundness and rotation
+ * Computes the minimum distance from a point to the outline of a
+ * diamond element, accounting for rounded corners and rotation.
  *
- * @param element The diamond element
- * @param p The point to consider
- * @returns The eucledian distance to the outline of the diamond
+ * @param element The diamond element to measure against
+ * @param elementsMap Map of all elements for resolving center points
+ * @param p The reference point in global coordinates
+ * @returns The minimum euclidean distance to the diamond outline
  */
 const distanceToDiamondElement = (
   element: ExcalidrawDiamondElement,
@@ -96,8 +101,7 @@ const distanceToDiamondElement = (
 ): number => {
   const center = elementCenterPoint(element, elementsMap);
 
-  // Rotate the point to the inverse direction to simulate the rotated diamond
-  // points. It's all the same distance-wise.
+  // Rotate the point to axis-aligned space for simpler distance calculation
   const rotatedPoint = pointRotateRads(p, center, -element.angle as Radians);
 
   const [sides, curves] = deconstructDiamondElement(element);
@@ -111,12 +115,13 @@ const distanceToDiamondElement = (
 };
 
 /**
- * Returns the distance of a point and the provided ellipse element, accounting
- * for roundness and rotation
+ * Computes the minimum distance from a point to the outline of an
+ * ellipse element, accounting for rotation.
  *
- * @param element The ellipse element
- * @param p The point to consider
- * @returns The eucledian distance to the outline of the ellipse
+ * @param element The ellipse element to measure against
+ * @param elementsMap Map of all elements for resolving center points
+ * @param p The reference point in global coordinates
+ * @returns The minimum euclidean distance to the ellipse outline
  */
 const distanceToEllipseElement = (
   element: ExcalidrawEllipseElement,
@@ -125,7 +130,7 @@ const distanceToEllipseElement = (
 ): number => {
   const center = elementCenterPoint(element, elementsMap);
   return ellipseDistanceFromPoint(
-    // Instead of rotating the ellipse, rotate the point to the inverse angle
+    // Rotate the point to axis-aligned space instead of rotating the ellipse
     pointRotateRads(p, center, -element.angle as Radians),
     ellipse(center, element.width / 2, element.height / 2),
   );
