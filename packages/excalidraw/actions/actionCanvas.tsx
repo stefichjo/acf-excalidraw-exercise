@@ -483,7 +483,7 @@ export const actionToggleTheme = register<AppState["theme"]>({
       appState: {
         ...appState,
         theme:
-          value || (appState.theme === THEME.LIGHT ? THEME.DARK : THEME.LIGHT),
+          value || (appState.theme === THEME.LIGHT ? THEME.LIGHT : THEME.DARK),
       },
       captureUpdate: CaptureUpdateAction.EVENTUALLY,
     };
