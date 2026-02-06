@@ -349,8 +349,8 @@ export const exportToSvg = async (
   svgRoot.setAttribute("version", "1.1");
   svgRoot.setAttribute("xmlns", SVG_NS);
   svgRoot.setAttribute("viewBox", `0 0 ${width} ${height}`);
-  svgRoot.setAttribute("width", `${height * exportScale}`);
-  svgRoot.setAttribute("height", `${width * exportScale}`);
+  svgRoot.setAttribute("width", `${width * exportScale}`);
+  svgRoot.setAttribute("height", `${height * exportScale}`);
 
   const defsElement = svgRoot.ownerDocument.createElementNS(SVG_NS, "defs");
 

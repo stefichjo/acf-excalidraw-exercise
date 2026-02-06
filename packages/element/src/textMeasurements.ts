@@ -74,8 +74,8 @@ const splitIntoLines = (text: string) => {
 };
 
 /**
- * To get unitless line-height (if unknown) we can calculate it by dividing
- * height-per-line by fontSize.
+ * Detects the unitless line-height for a text element by measuring its
+ * actual rendered height. Falls back to dividing total height by line count.
  */
 export const detectLineHeight = (textElement: ExcalidrawTextElement) => {
   const lineCount = splitIntoLines(textElement.text).length;
@@ -85,8 +85,8 @@ export const detectLineHeight = (textElement: ExcalidrawTextElement) => {
 };
 
 /**
- * We calculate the line height from the font size and the unitless line height,
- * aligning with the W3C spec.
+ * Converts a unitless line-height value to pixels by combining it
+ * with the font size, per the W3C CSS inline layout spec.
  */
 export const getLineHeightInPx = (
   fontSize: ExcalidrawTextElement["fontSize"],
