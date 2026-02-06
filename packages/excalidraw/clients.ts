@@ -122,7 +122,7 @@ export const renderRemoteCursors = ({
       context.closePath();
     }
 
-    // TODO remove the dark theme color after we stop inverting canvas colors
+    // NOTE: dark theme uses a separate speaking color since canvas colors are inverted
     const IS_SPEAKING_COLOR =
       appState.theme === THEME.DARK ? "#2f6330" : COLOR_VOICE_CALL;
 
