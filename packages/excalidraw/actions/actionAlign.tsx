@@ -87,7 +87,7 @@ export const actionAlignTop = register({
     return {
       appState,
       elements: alignSelectedElements(elements, appState, app, {
-        position: "end",
+        position: "start",
         axis: "y",
       }),
       captureUpdate: CaptureUpdateAction.IMMEDIATELY,
