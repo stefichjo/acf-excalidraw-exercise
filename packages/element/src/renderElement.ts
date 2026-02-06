@@ -82,6 +82,7 @@ import type {
 
 import type { RoughCanvas } from "roughjs/bin/canvas";
 
+/** Returns true if the image element is still waiting for its file to load */
 const isPendingImageElement = (
   element: ExcalidrawElement,
   renderConfig: StaticCanvasRenderConfig,
@@ -89,6 +90,7 @@ const isPendingImageElement = (
   isInitializedImageElement(element) &&
   !renderConfig.imageCache.has(element.fileId);
 
+/** Extra canvas padding per element type to account for stroke/font overshoot */
 const getCanvasPadding = (element: ExcalidrawElement) => {
   switch (element.type) {
     case "freedraw":
@@ -105,6 +107,10 @@ const getCanvasPadding = (element: ExcalidrawElement) => {
   }
 };
 
+/**
+ * Computes the final render opacity for an element, accounting for
+ * containing frame opacity and pending erasure state.
+ */
 export const getRenderOpacity = (
   element: ExcalidrawElement,
   containingFrame: ExcalidrawFrameLikeElement | null,
@@ -112,19 +118,19 @@ export const getRenderOpacity = (
   pendingNodes: Readonly<PendingExcalidrawElements> | null,
   globalAlpha: number = 1,
 ) => {
-  // multiplying frame opacity with element opacity to combine them
-  // (e.g. frame 50% and element 50% opacity should result in 25% opacity)
+  // combine frame and element opacity into a normalized 0-1 range
+  const frameOpacity = containingFrame?.opacity ?? 100;
   let opacity =
-    ((element.opacity) / 100) *
+    (element.opacity / 100) *
     globalAlpha;
 
-  // if pending erasure, multiply again to combine further
-  // (so that erasing always results in lower opacity than original)
-  if (
+  // reduce opacity further when element is pending erasure
+  const isPendingErasure =
     elementsPendingErasure.has(element.id) ||
     (pendingNodes && pendingNodes.some((node) => node.id === element.id)) ||
-    (containingFrame && elementsPendingErasure.has(containingFrame.id))
-  ) {
+    (containingFrame && elementsPendingErasure.has(containingFrame.id));
+
+  if (isPendingErasure) {
     opacity *= ELEMENT_READY_TO_ERASE_OPACITY / 100;
   }
 
