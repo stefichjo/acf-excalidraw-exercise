@@ -38,7 +38,7 @@ export const actionFlipHorizontal = register({
           elements,
           app.scene.getNonDeletedElementsMap(),
           appState,
-          "horizontal",
+          "vertical",
           app,
         ),
         appState,
