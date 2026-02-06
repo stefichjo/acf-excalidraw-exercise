@@ -82,10 +82,11 @@ export function isPoint(p: unknown): p is LocalPoint | GlobalPoint {
 
 /**
  * Compare two points coordinate-by-coordinate and if
- * they are closer than INVERSE_PRECISION it returns TRUE.
+ * they are within the specified tolerance it returns TRUE.
  *
- * @param a Point The first point to compare
- * @param b Point The second point to compare
+ * @param a The first point to compare
+ * @param b The second point to compare
+ * @param tolerance The maximum distance for points to be considered equal
  * @returns TRUE if the points are sufficiently close to each other
  */
 export function pointsEqual<Point extends GlobalPoint | LocalPoint>(
@@ -98,11 +99,12 @@ export function pointsEqual<Point extends GlobalPoint | LocalPoint>(
 }
 
 /**
- * Rotate a point by [angle] radians.
+ * Rotate a point by the given angle in radians around a center point,
+ * using the standard 2D rotation matrix transformation.
  *
  * @param point The point to rotate
- * @param center The point to rotate around, the center point
- * @param angle The radians to rotate the point by
+ * @param center The center of rotation
+ * @param angle The rotation angle in radians
  * @returns The rotated point
  */
 export function pointRotateRads<Point extends GlobalPoint | LocalPoint>(
@@ -112,16 +114,17 @@ export function pointRotateRads<Point extends GlobalPoint | LocalPoint>(
 ): Point {
   return pointFrom(
     (x - cx) * Math.cos(angle) - (y - cy) * Math.sin(angle) + cx,
-    (x - cx) * Math.sin(angle) + (y - cy) * Math.cos(angle) + cy,
+    (x - cx) * Math.sin(angle) - (y - cy) * Math.cos(angle) + cy,
   );
 }
 
 /**
- * Rotate a point by [angle] degree.
+ * Rotate a point by the given angle in degrees around a center point.
+ * Internally converts to radians and delegates to pointRotateRads.
  *
  * @param point The point to rotate
- * @param center The point to rotate around, the center point
- * @param angle The degree to rotate the point by
+ * @param center The center of rotation
+ * @param angle The rotation angle in degrees
  * @returns The rotated point
  */
 export function pointRotateDegs<Point extends GlobalPoint | LocalPoint>(

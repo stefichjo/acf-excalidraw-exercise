@@ -1,11 +1,13 @@
 import type { GlobalPoint, LocalPoint, Vector } from "./types";
 
 /**
- * Create a vector from the x and y coordiante elements.
+ * Create a vector from the x and y coordinate components.
  *
- * @param x The X aspect of the vector
- * @param y T Y aspect of the vector
- * @returns The constructed vector with X and Y as the coordinates
+ * @param x The X component of the vector
+ * @param y The Y component of the vector
+ * @param originX The X component of the origin (default 0)
+ * @param originY The Y component of the origin (default 0)
+ * @returns The constructed vector relative to the origin
  */
 export function vector(
   x: number,
@@ -17,13 +19,13 @@ export function vector(
 }
 
 /**
- * Turn a point into a vector with the origin point.
+ * Create a vector from a point relative to an origin.
  *
- * @param p The point to turn into a vector
- * @param origin The origin point in a given coordiante system
- * @param threshold The threshold to consider the vector as 'undefined'
- * @param defaultValue The default value to return if the vector is 'undefined'
- * @returns The created vector from the point and the origin or default
+ * @param p The point to convert into a vector
+ * @param origin The origin point in the coordinate system
+ * @param threshold Minimum magnitude squared below which the vector is considered zero
+ * @param defaultValue The fallback vector if magnitude is below threshold
+ * @returns The created vector from the point and origin, or the default value
  */
 export function vectorFromPoint<Point extends GlobalPoint | LocalPoint>(
   p: Point,
@@ -41,34 +43,34 @@ export function vectorFromPoint<Point extends GlobalPoint | LocalPoint>(
 }
 
 /**
- * Cross product is a binary operation on two vectors in 2D space.
- * It results in a vector that is perpendicular to both vectors.
+ * Cross product of two 2D vectors (also known as the wedge product).
+ * Returns the signed area of the parallelogram formed by the vectors.
  *
- * @param a One of the vectors to use for the directed area calculation
- * @param b The other vector to use for the directed area calculation
- * @returns The directed area value for the two vectos
+ * @param a The first vector operand
+ * @param b The second vector operand
+ * @returns The signed scalar cross product value
  */
 export function vectorCross(a: Vector, b: Vector): number {
   return a[0] * b[1] - b[0] * a[1];
 }
 
 /**
- * Dot product is defined as the sum of the products of the
- * two vectors.
+ * Dot product of two vectors, computed as the sum of the
+ * component-wise products.
  *
- * @param a One of the vectors for which the sum of products is calculated
- * @param b The other vector for which the sum of products is calculated
- * @returns The sum of products of the two vectors
+ * @param a The first vector operand
+ * @param b The second vector operand
+ * @returns The scalar dot product of the two vectors
  */
 export function vectorDot(a: Vector, b: Vector) {
   return a[0] * b[0] + a[1] * b[1];
 }
 
 /**
- * Determines if the value has the shape of a Vector.
+ * Type guard to check if a value is a valid Vector.
  *
  * @param v The value to test
- * @returns TRUE if the value has the shape and components of a Vectors
+ * @returns TRUE if the value is a two-element numeric array
  */
 export function isVector(v: unknown): v is Vector {
   return (
@@ -93,10 +95,10 @@ export function vectorAdd(a: Readonly<Vector>, b: Readonly<Vector>): Vector {
 }
 
 /**
- * Add two vectors by adding their coordinates.
+ * Subtract one vector from another component-wise.
  *
- * @param start One of the vectors to add
- * @param end The other vector to add
+ * @param start The vector to subtract from
+ * @param end The vector to subtract
  * @returns The sum vector of the two provided vectors
  */
 export function vectorSubtract(
