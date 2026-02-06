@@ -760,7 +760,7 @@ export const textWysiwyg = ({
     }
   };
 
-  // FIXME after we start emitting updates from Store for appState.theme
+  // FIXME subscribe to store theme updates once Store emits appState changes
   const unsubOnChange = app.onChangeEmitter.on((elements) => {
     if (app.state.theme !== LAST_THEME) {
       updateWysiwygStyle();
