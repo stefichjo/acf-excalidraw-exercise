@@ -70,7 +70,7 @@ export const actionChangeViewBackgroundColor = register<Partial<AppState>>({
     };
   },
   PanelComponent: ({ elements, appState, updateData, appProps, data }) => {
-    // FIXME move me to src/components/mainMenu/DefaultItems.tsx
+    // FIXME move to src/components/mainMenu/DefaultItems.tsx (see #7120)
     return (
       <ColorPicker
         palette={null}
