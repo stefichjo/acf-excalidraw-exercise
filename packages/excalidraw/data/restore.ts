@@ -469,7 +469,7 @@ export const restoreElement = (
         ...getSizeFromPoints(points),
       };
 
-      // TODO: Separate arrow from linear element
+      // TODO: separate arrow from linear element (see #5764)
       const restoredElement = isElbowArrow(element)
         ? restoreElementWithProperties(element as ExcalidrawElbowArrowElement, {
             ...base,
